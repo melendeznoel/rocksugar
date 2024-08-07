@@ -1,0 +1,20 @@
+{
+  "name": "searchnutritionproduct",
+  "version": "1.0.0",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "node --test --require ts-node/register ./test/fhir.test.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.143",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
+  }
+}
