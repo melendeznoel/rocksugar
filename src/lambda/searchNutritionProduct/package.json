@@ -1,20 +1,33 @@
 {
-  "name": "searchnutritionproduct",
+  "name": "search-nutrition-product",
   "version": "1.0.0",
   "main": "index.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
+    "build": "npx tsc && npx copyfiles package.json dist",
+    "postbuild": "cd dist && npm install --omit=dev",
     "test": "node --test --require ts-node/register ./test/fhir.test.ts"
   },
   "keywords": [],
-  "author": "",
+  "author": "nm",
   "license": "ISC",
   "description": "",
   "devDependencies": {
     "@types/aws-lambda": "^8.10.143",
+    "@types/lodash": "^4.17.7",
+    "@types/node": "^22.1.0",
+    "@types/sinon": "^17.0.3",
+    "copyfiles": "^2.4.1",
+    "sinon": "^18.0.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.624.0",
+    "@aws-sdk/util-dynamodb": "^3.624.0",
+    "lodash": "^4.17.21",
+    "winston": "^3.13.1"
   }
 }
