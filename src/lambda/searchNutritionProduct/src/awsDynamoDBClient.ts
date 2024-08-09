@@ -108,10 +108,9 @@ export const searchRecords = async (dynamoDbClient: DynamoDBClient, tableName: s
 
         const scanCommandInput: ScanCommandInput = {
             TableName: tableName,
-            FilterExpression: "contains(#identifier.#value, :identifierObj)",
+            FilterExpression: "contains(#identifier, :identifierObj)",
             ExpressionAttributeNames: {
-                "#identifier": "identifier",
-                "#value": "value"
+                "#identifier": "identifier"
             },
             ExpressionAttributeValues: {
                 ":identifierObj": {
