@@ -8,7 +8,7 @@
   "scripts": {
     "build": "npx tsc && npx copyfiles package.json dist",
     "postbuild": "cd dist && npm install --omit=dev",
-    "test": "node --test --require ts-node/register ./test/fhir.test.ts"
+    "test": "c8 node --test --require ts-node/register ./test/fhir.test.ts"
   },
   "keywords": [],
   "author": "nm",
@@ -19,6 +19,7 @@
     "@types/lodash": "^4.17.7",
     "@types/node": "^22.1.0",
     "@types/sinon": "^17.0.3",
+    "c8": "^10.1.2",
     "copyfiles": "^2.4.1",
     "sinon": "^18.0.0",
     "ts-node": "^10.9.2",
