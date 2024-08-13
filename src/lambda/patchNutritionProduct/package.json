@@ -1,0 +1,35 @@
+{
+  "name": "patch-nutrition-pproduct",
+  "version": "1.0.0",
+  "description": "lambda",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx tsc && npx copyfiles package.json dist",
+    "postbuild": "cd dist && npm install --omit=dev",
+    "test": "c8 node --test --require ts-node/register ./test/fhir.test.ts"
+  },
+  "keywords": [
+    "aws",
+    "lambda",
+    "typescript"
+  ],
+  "author": "nm",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.143",
+    "@types/lodash": "^4.17.7",
+    "@types/node": "^22.1.0",
+    "@types/sinon": "^17.0.3",
+    "c8": "^10.1.2",
+    "copyfiles": "^2.4.1",
+    "sinon": "^18.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.624.0",
+    "@aws-sdk/util-dynamodb": "^3.624.0",
+    "lodash": "^4.17.21",
+    "winston": "^3.13.1"
+  }
+}
