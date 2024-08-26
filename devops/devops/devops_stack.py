@@ -2,7 +2,9 @@ from aws_cdk import (
     Stack,
     aws_dynamodb as dynamodb,
     aws_lambda as _lambda,
-    RemovalPolicy
+    RemovalPolicy,
+    aws_apigatewayv2 as apiGatewayV2,
+    aws_apigatewayv2_integrations as apiGatewayV2Integrations,
 )
 from constructs import Construct
 
@@ -23,7 +25,7 @@ class DevopsStack(Stack):
 
         search_nutrition_product_lambda_function_name = "search-nutrition-product-function"
 
-        search_products_lambda_function = _lambda.Function(self, search_nutrition_product_lambda_function_name,
+        search_nutrition_products_lambda_function = _lambda.Function(self, search_nutrition_product_lambda_function_name,
             function_name=search_nutrition_product_lambda_function_name,
             runtime=_lambda.Runtime.NODEJS_20_X,
             handler="index.handler",
@@ -34,4 +36,21 @@ class DevopsStack(Stack):
             }
         )
 
-        pantry_table.grant_read_write_data(search_products_lambda_function)
+        pantry_table.grant_read_write_data(search_nutrition_products_lambda_function)
+
+        http_api = apiGatewayV2.HttpApi(self, "Pantry Api",
+            api_name="Pantry HTTP API",
+            description="This service serves the pantry items",
+            default_authorizer=None
+        )
+
+        search_nutrition_products_lambda_integration = apiGatewayV2Integrations.HttpLambdaIntegration("LambdaIntegration",
+            handler=search_nutrition_products_lambda_function
+        )
+
+        http_api.add_routes(
+            path="/_search",
+            methods=[apiGatewayV2.HttpMethod.POST],
+            integration=search_nutrition_products_lambda_integration
+        )
+        
