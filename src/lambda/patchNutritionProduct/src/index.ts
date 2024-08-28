@@ -2,7 +2,9 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import { logger} from "./logging"
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-    logger.info('Search', { data: { event } })
+    const { id }  = event.pathParameters || {}
+
+    logger.info('Search', { data: { event, id } })
 
     const response = {
         statusCode: 200,

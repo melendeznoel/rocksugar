@@ -26,31 +26,33 @@ class DevopsStack(Stack):
         search_nutrition_product_lambda_function_name = "search-nutrition-product-function"
 
         search_nutrition_products_lambda_function = _lambda.Function(self, search_nutrition_product_lambda_function_name,
+        search_nutrition_products_lambda_function = _lambda.Function(
             function_name=search_nutrition_product_lambda_function_name,
             runtime=_lambda.Runtime.NODEJS_20_X,
             handler="index.handler",
             code=_lambda.Code.from_asset("../src/lambda/searchNutritionProduct/dist"),
             description="Search operation for nutrition product",
-            environment={
-                "PRODUCTS_TABLE_NAME": pantry_table.table_name
-            }
         )
 
         pantry_table.grant_read_write_data(search_nutrition_products_lambda_function)
 
-        http_api = apiGatewayV2.HttpApi(self, "Pantry Api",
+            self,
+            "Pantry Api",
             api_name="Pantry HTTP API",
             description="This service serves the pantry items",
-            default_authorizer=None
+            default_authorizer=None,
         )
 
         search_nutrition_products_lambda_integration = apiGatewayV2Integrations.HttpLambdaIntegration("LambdaIntegration",
             handler=search_nutrition_products_lambda_function
+        search_nutrition_products_lambda_integration = (
+            apiGatewayV2Integrations.HttpLambdaIntegration(
+                "LambdaIntegration", handler=search_nutrition_products_lambda_function
+            )
         )
 
         http_api.add_routes(
             path="/_search",
             methods=[apiGatewayV2.HttpMethod.POST],
-            integration=search_nutrition_products_lambda_integration
+            integration=search_nutrition_products_lambda_integration,
         )
-        
