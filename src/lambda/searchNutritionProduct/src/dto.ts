@@ -1,7 +1,7 @@
 import { Transform, Readable, Writable } from 'stream'
 import { pipeline } from 'stream/promises'
 import { logger} from './logging'
-import { NutritionProduct } from './types'
+import { NutritionProduct } from './models'
 import { get } from 'lodash'
 
 const parallelTransform = new Transform({
