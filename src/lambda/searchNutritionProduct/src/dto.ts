@@ -1,22 +1,41 @@
-import { Transform } from 'stream'
+import { Transform, Readable, Writable } from 'stream'
 import { pipeline } from 'stream/promises'
+import { logger} from './logging'
+import { NutritionProduct } from './types'
+import { get } from 'lodash'
 
 const parallelTransform = new Transform({
   objectMode: true,
   async transform(chunk, encoding, callback) {
-    // Simulate an async operation (e.g., a database lookup or API call)
-    await new Promise(resolve => setTimeout(resolve, 100)); // Simulated delay
-    callback(null, `Processed: ${chunk}\n`);
+    const nutritionProduct: Partial<NutritionProduct> = {
+      resourceType: "NutritionProduct",
+      id: get(chunk, 'id', ''),
+    }
+
+    logger.info('Parallel Transformation', { data: { nutritionProduct } })
+
+    callback(null, nutritionProduct)
   }
-});
+})
 
-// Example usage with an array of data
-const inputData = ['item1', 'item2', 'item3', 'item4'];
+export const mapItPipe = async (data: Record<string, any>[]): Promise<any> => {
+  const result: any[] = []
 
-async function runPipeline() {
+  const writable = new Writable({
+    objectMode: true,
+    write(chunk, encoding, callback) {
+      result.push(chunk)
+      callback()
+    }
+  })
+
   await pipeline(
-    Readable.from(inputData),  // Read from data source
-    parallelTransform,         // Process data in parallel
-    process.stdout             // Output to console
-  );
+    Readable.from(data),
+    parallelTransform,
+    writable
+  )
+
+  logger.info('MapItPipe Result', { data: { result } })
+
+  return result
 }
